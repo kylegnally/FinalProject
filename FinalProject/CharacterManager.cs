@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -127,7 +128,7 @@ namespace FinalProject
                 }
             }
 
-            // CharacterFrequencyObjectArray is what we want to use further. 
+            // CharacterFrequencyObjectArray is what we want to use further. We'll sort it first.
 
         }
 
@@ -155,8 +156,13 @@ namespace FinalProject
                 }
             }
 
-            // CharacterFrequencyObjectArray is what we want to use further. 
+            // CharacterFrequencyObjectArray is what we want to use further. We'll sort it first.
 
+        }
+
+        private void SortStringsArray(CharacterFrequency[] stringsArray)
+        {
+            // Time for a bubble sort!
         }
     }
 }
