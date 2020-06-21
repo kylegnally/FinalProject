@@ -79,34 +79,34 @@ namespace FinalProject
             }
         }
 
-        //public int[] SortArray(int[] array)
-        //{
-        //    bool sorted = false;
-        //    int size = array.Length;
-        //    while (!sorted)
-        //    {
-        //        // the whole array
-        //        foreach (int arrayMember in array)
-        //        {
-        //            // for every array member 
-        //            for (int i = 1; i < size; i++)
-        //            {
-        //                // do a comparison
-        //                if (array[i] <= array[i - 1])
-        //                {
-        //                    // do a swap
-        //                    int temp = array[i];
-        //                    array[i] = array[i - 1];
-        //                    array[i - 1] = temp;
-        //                    sorted = true;
-        //                }
-        //            }
-        //            size = size - 1;
-        //        }
-        //    }
-        //    _resultingArray = array;
-        //    return Result;
-        //}
+        public int[] SortArray(int[] array)
+        {
+            bool sorted = false;
+            int size = array.Length;
+            while (!sorted)
+            {
+                // the whole array
+                foreach (int arrayMember in array)
+                {
+                    // for every array member 
+                    for (int i = 1; i < size; i++)
+                    {
+                        // do a comparison
+                        if (array[i] <= array[i - 1])
+                        {
+                            // do a swap
+                            int temp = array[i];
+                            array[i] = array[i - 1];
+                            array[i - 1] = temp;
+                            sorted = true;
+                        }
+                    }
+                    size = size - 1;
+                }
+            }
+            _resultingArray = array;
+            return Result;
+        }
 
         private void ProcessString(string s)
         {
@@ -156,8 +156,37 @@ namespace FinalProject
                 }
             }
 
-            // CharacterFrequencyObjectArray is what we want to use further. We'll sort it first.
+            SortFrequencies(CharacterFrequencyObjectArray);
 
+        }
+
+        private CharacterFrequency[] SortFrequencies(CharacterFrequency[] characterFrequencyObjectArray)
+        {
+            bool sorted = false;
+            int size = characterFrequencyObjectArray.Length;
+            while (!sorted)
+            {
+                // the whole array
+                foreach (CharacterFrequency freqObj in characterFrequencyObjectArray)
+                {
+                    // for every array member 
+                    for (int i = 1; i < size; i++)
+                    {
+                        // do a comparison
+                        if (characterFrequencyObjectArray[i] <= characterFrequencyObjectArray[i - 1])
+                        {
+                            // do a swap
+                            int temp = array[i];
+                            array[i] = array[i - 1];
+                            array[i - 1] = temp;
+                            sorted = true;
+                        }
+                    }
+                    size = size - 1;
+                }
+            }
+            _resultingArray = array;
+            return Result;
         }
 
         private void HandleInput(string[] s)
