@@ -10,25 +10,25 @@ namespace FinalProject
 {
     class CharacterFrequency
     {
+        public string String { get; set; }
         public char Character { get; set; }
-
         public int Frequency { get; set; }
-
-        public int ASCII { get; set; }
+        public int ASCVal { get; set; }
 
         public CharacterFrequency() { }
 
         public CharacterFrequency(char charToCheck)
         {
+            Frequency = 0;
             Character = charToCheck;
             int _ascii = (int)charToCheck;
-            ASCII = _ascii;
+            ASCVal = _ascii;
             IncrementFrequency();
         }
 
         public CharacterFrequency(string stringToCheck)
         {
-
+            String = stringToCheck;
         }
 
         public bool Equals(char charToCheck)

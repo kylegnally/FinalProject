@@ -8,11 +8,21 @@ namespace FinalProject
 {
     class Program
     {
+
         static void Main(string[] args)
         {
-            if (args.Length > 0) CharacterManager manager = new CharacterManager(args);
-            string stringToEncode = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbccccccccccddddddddfffffggggghhhh";
+            string stringToEncode = "abscccddddeeeeeffffffggggggghhhhhhhhiiiiiiiiijjjjjjjjjjkkkkkkkkkkk";
+            
 
+            if (args.Length > 0)
+            {
+                CharacterManager manager = new CharacterManager(args);
+            }
+            else
+            {
+                CharacterManager manager = new CharacterManager(stringToEncode);
+            }
+            //string stringToEncode = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbccccccccccddddddddfffffggggghhhh";
 
         }
     }

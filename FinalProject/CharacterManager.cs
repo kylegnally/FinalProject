@@ -1,10 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinalProject
 {
@@ -26,7 +22,7 @@ namespace FinalProject
         }
 
         /// <summary>
-        /// Constructor for the CounterManager class. 
+        /// Constructor for the CounterManager class. This construc
         /// </summary>
         /// <param name="args"></param>
         public CharacterManager(string[] args)
@@ -83,11 +79,44 @@ namespace FinalProject
             }
         }
 
+        //public int[] SortArray(int[] array)
+        //{
+        //    bool sorted = false;
+        //    int size = array.Length;
+        //    while (!sorted)
+        //    {
+        //        // the whole array
+        //        foreach (int arrayMember in array)
+        //        {
+        //            // for every array member 
+        //            for (int i = 1; i < size; i++)
+        //            {
+        //                // do a comparison
+        //                if (array[i] <= array[i - 1])
+        //                {
+        //                    // do a swap
+        //                    int temp = array[i];
+        //                    array[i] = array[i - 1];
+        //                    array[i - 1] = temp;
+        //                    sorted = true;
+        //                }
+        //            }
+        //            size = size - 1;
+        //        }
+        //    }
+        //    _resultingArray = array;
+        //    return Result;
+        //}
+
         private void ProcessString(string s)
         {
-            string[] splitString;
-            splitString = s.Split(',');
-            HandleInput(splitString);
+            string[] sa = new string[s.Length];
+            int i = 0;
+            foreach (char c in s)
+            {
+                sa[i] = c.ToString();
+                i++;
+            }
         }
 
         /// <summary>
@@ -108,7 +137,6 @@ namespace FinalProject
         {
             char[] foundChars = new char[256];
             CharacterFrequencyObjectArray = new CharacterFrequency[256];
-            CharacterFrequency characterFrequencyObject;
 
             foreach (char aChar in chars)
             {
