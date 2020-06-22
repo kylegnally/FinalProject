@@ -12,7 +12,7 @@ namespace FinalProject
         static void Main(string[] args)
         {
             string stringToEncode = ".kcjvhxjdhcvgzxkjdhvbxdj.rktghsdrjzgeulryskgfcusedtyf476r76r53 654reyfgvjx";
-            args = new[] { "wap2.txt" };
+            args = new[] { "wap.txt" };
 
 
             if (args.Length > 0)
@@ -23,8 +23,6 @@ namespace FinalProject
             {
                 CharacterManager manager = new CharacterManager(stringToEncode);
             }
-            //string stringToEncode = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbccccccccccddddddddfffffggggghhhh";
-
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Runtime.CompilerServices;
 
 namespace FinalProject
 {
@@ -14,11 +15,10 @@ namespace FinalProject
         private string CurrentDir { get; }
 
         private CharacterFrequency[] _characterFreqencyArrayField;
+        private List<FrequencyNode<CharacterFrequency>> _nodeListField;
 
-        /// <summary>
-        /// An array of CharacterFrequency objects.
-        /// </summary>
-        public CharacterFrequency[] CharacterFrequencyObjectArray;
+        public CharacterFrequency[] CharacterFrequencyObjectArray { get; set; }
+        public List<FrequencyNode<CharacterFrequency>> SortedNodeList { get; set; }
 
         public CharacterManager(string s)
         {
@@ -63,11 +63,6 @@ namespace FinalProject
                     }
                     catch
                     {
-                        // Since we can use types in switch statements now, we can
-                        // use the type of the exception as the case in the switch when
-                        // determining which message the user should see.
-                        // Exception messages are always obscure to users who aren't 
-                        // programmers. This technique allows for an explanation.
                         throw new FileLoadException("Failed to load!");
                     }
                 }
@@ -108,42 +103,11 @@ namespace FinalProject
         /// <param name="file"></param>
         private void ProcessFile(StreamReader file)
         {
-            // Are you going to use chars again? Maybe you should 
-            // consider using strings. 
             char[] chars;
             string contents = file.ReadToEnd();
             chars = contents.ToCharArray();
             HandleInput(chars);
         }
-
-
-        //private void SortFrequencies(CharacterFrequency[] characterFrequencyObjectArray)
-        //{
-        //    bool sorted = false;
-        //    int size = characterFrequencyObjectArray.Length;
-        //    while (!sorted)
-        //    {
-        //        // the whole array
-        //        foreach (CharacterFrequency freqObj in characterFrequencyObjectArray)
-        //        {
-        //            // for every array member 
-        //            for (int i = 1; i < size + 1; i++)
-        //            {
-        //                // do a comparison
-        //                if (characterFrequencyObjectArray[i].Frequency <= characterFrequencyObjectArray[i - 1].Frequency)
-        //                {
-        //                    // do a swap
-        //                    CharacterFrequency temp = characterFrequencyObjectArray[i];
-        //                    characterFrequencyObjectArray[i] = characterFrequencyObjectArray[i - 1];
-        //                    characterFrequencyObjectArray[i - 1] = temp;
-        //                    sorted = true;
-        //                }
-        //            }
-        //            size = size - 1;
-        //        }
-        //    }
-        //    CharacterFrequencyObjectArray = characterFrequencyObjectArray;
-        //}
 
         public CharacterFrequency[] SortFrequencies(CharacterFrequency[] array)
         {
@@ -159,7 +123,6 @@ namespace FinalProject
                         int freq2 = array[i - 1].Frequency;
                         if (freq1 <= freq2)
                         {
-                            // do a swap
                             CharacterFrequency temp = array[i];
                             array[i] = array[i - 1];
                             array[i - 1] = temp;
@@ -170,33 +133,6 @@ namespace FinalProject
                     size = size - 1;
                 }
             }
-            //bool sorted = false;
-            //int size = array.Length;
-            //while (!sorted)
-            //{
-            //    // the whole array
-            //    foreach (CharacterFrequency arrayMember in array)
-            //    {
-            //        if (arrayMember != null)
-            //        {
-            //            // for every array member 
-            //        for (int i = 1; i < size; i++)
-            //        {
-            //            // do a comparison
-            //            if (array[i].Frequency <= array[i - 1].Frequency)
-            //            {
-            //                // do a swap
-            //                CharacterFrequency temp = array[i];
-            //                array[i] = array[i - 1];
-            //                array[i - 1] = temp;
-            //                sorted = true;
-            //            }
-            //        }
-            //        size = size - 1;
-            //        }
-
-            //    }
-            //}
             CharacterFrequencyObjectArray = array;
             return array;
         }
@@ -204,45 +140,42 @@ namespace FinalProject
         private void HandleInput(char[] chars)
         {
             char[] foundChars = new char[256];
-            CharacterFrequencyObjectArray = new CharacterFrequency[256];
+            _characterFreqencyArrayField = new CharacterFrequency[256];
 
             foreach (char aChar in chars)
             {
-                for (int i = 0; i < CharacterFrequencyObjectArray.Length; i++)
+                for (int i = 0; i < _characterFreqencyArrayField.Length; i++)
                 {
                     int asciiVal = (int)aChar;
-                    if (CharacterFrequencyObjectArray[asciiVal] == null)
+                    if (_characterFreqencyArrayField[asciiVal] == null)
                     {
-                        CharacterFrequencyObjectArray[asciiVal] = new CharacterFrequency(aChar);
+                        _characterFreqencyArrayField[asciiVal] = new CharacterFrequency(aChar);
                         break;
                     }
-                    else if (CharacterFrequencyObjectArray[asciiVal].Equals(aChar))
+                    else if (_characterFreqencyArrayField[asciiVal].Equals(aChar))
                     {
-                        CharacterFrequencyObjectArray[asciiVal].IncrementFrequency();
+                        _characterFreqencyArrayField[asciiVal].IncrementFrequency();
                         break;
                     }
                 }
             }
 
-            SortFrequencies(CompactArray(CharacterFrequencyObjectArray));
+            CharacterFrequencyObjectArray = _characterFreqencyArrayField;
+            MakeNodelist(SortFrequencies(CompactArray(CharacterFrequencyObjectArray)));
 
         }
 
         private void HandleInput(string[] s)
         {
-            //char[] foundChars = new char[256];
             CharacterFrequencyObjectArray = new CharacterFrequency[256];
             CharacterFrequency characterFrequencyObject;
             
             foreach (string aString in s)
             {
-                // get our asciiVal
                 int asciiVal = (int) char.Parse(aString);
 
-                // if the entry at the index corresponding to the ascii value is null
                 if (CharacterFrequencyObjectArray[asciiVal] == null)
                 {
-                    // make a CF object from that
                     CharacterFrequencyObjectArray[asciiVal] = new CharacterFrequency(aString);
                 }
                 else if (CharacterFrequencyObjectArray[asciiVal].Frequency > 0)
@@ -251,7 +184,7 @@ namespace FinalProject
             }
 
             SortFrequencies(CompactArray(CharacterFrequencyObjectArray));
-
+            SortedNodeList = _nodeListField;
         }
 
         private CharacterFrequency[] CompactArray(CharacterFrequency[] freqArray)
@@ -273,6 +206,18 @@ namespace FinalProject
             }
 
             return compacted;
+        }
+
+        private List<FrequencyNode<CharacterFrequency>> MakeNodelist(CharacterFrequency[] freqArray)
+        {
+            _nodeListField = new List<FrequencyNode<CharacterFrequency>>();
+            foreach (CharacterFrequency charFreq in freqArray)
+            {
+                _nodeListField.Add(new FrequencyNode<CharacterFrequency>(charFreq));
+            }
+
+            SortedNodeList = _nodeListField;
+            return _nodeListField;
         }
     }
 }
