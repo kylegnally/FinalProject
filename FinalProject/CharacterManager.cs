@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
@@ -148,32 +149,23 @@ namespace FinalProject
         {
             int size = array.Length;
             bool sorted = false;
-
             while (!sorted)
             {
                 foreach (CharacterFrequency freq in array)
                 {
-                    //if (freq != null)
-                    //{
-                    //    frequency = freq.Frequency;
-                    //    asciiVal = freq.ASCII;
-                    //}
-
                     for (int i = 1; i < size; i++)
                     {
-                        if (array[i] != null && array[i - 1] != null)
+                        
+                        if (array[i].Frequency <= array[i - 1].Frequency)
                         {
-                            if (array[i].Frequency <= array[i - 1].Frequency)
-                            {
-                                // do a swap
-                                CharacterFrequency temp = array[i];
-                                array[i] = array[i - 1];
-                                array[i - 1] = temp;
-                                sorted = true;
-                            }
+                            // do a swap
+                            CharacterFrequency temp = array[i];
+                            array[i] = array[i - 1];
+                            array[i - 1] = temp;
+                            sorted = true;
                         }
                     }
-
+                    
                     size = size - 1;
                 }
             }
@@ -230,7 +222,7 @@ namespace FinalProject
                 }
             }
 
-            SortFrequencies(CharacterFrequencyObjectArray);
+            SortFrequencies(CompactArray(CharacterFrequencyObjectArray));
 
         }
 
@@ -256,13 +248,29 @@ namespace FinalProject
                 else CharacterFrequencyObjectArray[asciiVal] = new CharacterFrequency();
             }
 
-            SortFrequencies(CharacterFrequencyObjectArray);
+            SortFrequencies(CompactArray(CharacterFrequencyObjectArray));
 
         }
 
-        private void SortStringsArray(CharacterFrequency[] stringsArray)
+        private CharacterFrequency[] CompactArray(CharacterFrequency[] freqArray)
         {
-            // Time for a bubble sort!
+            List<CharacterFrequency> tempList = new List<CharacterFrequency>();
+            int i = 0;
+            foreach (CharacterFrequency freqObj in freqArray)
+            {
+                if (freqObj != null) tempList.Add(freqObj);
+            }
+
+            CharacterFrequency[] compacted = new CharacterFrequency[tempList.Count];
+
+
+            foreach (CharacterFrequency freqObj in tempList)
+            {
+                compacted[i] = freqObj;
+                i++;
+            }
+
+            return compacted;
         }
     }
 }

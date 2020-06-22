@@ -15,9 +15,9 @@ namespace FinalProject
 
         public string CharacterAsAString { get; set; }
 
-        public int Frequency { get; set; }
+        public int Frequency { get; private set; }
 
-        public int ASCII { get; set; }
+        public int ASCII { get; private set; }
 
         public CharacterFrequency()
         {
@@ -27,8 +27,9 @@ namespace FinalProject
         public CharacterFrequency(char charToCheck)
         {
             Character = charToCheck;
-            int _ascii = (int)charToCheck;
-            ASCII = _ascii;
+            CharacterAsAString = charToCheck.ToString();
+            int ascii = (int)charToCheck;
+            ASCII = ascii;
             IncrementFrequency();
         }
 
@@ -38,6 +39,7 @@ namespace FinalProject
             CharacterAsAString = _stringToCheck;
             char c = char.Parse(stringToCheck);
             int ascii = (int)c;
+            Character = c;
             ASCII = ascii;
             IncrementFrequency();
         }
