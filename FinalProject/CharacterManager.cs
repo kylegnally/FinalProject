@@ -146,8 +146,6 @@ namespace FinalProject
 
         public void SortFrequencies(CharacterFrequency[] array)
         {
-            int frequency;
-            int asciiVal;
             int size = array.Length;
             bool sorted = false;
 
@@ -155,11 +153,11 @@ namespace FinalProject
             {
                 foreach (CharacterFrequency freq in array)
                 {
-                    if (freq != null)
-                    {
-                        frequency = freq.Frequency;
-                        asciiVal = freq.ASCII;
-                    }
+                    //if (freq != null)
+                    //{
+                    //    frequency = freq.Frequency;
+                    //    asciiVal = freq.ASCII;
+                    //}
 
                     for (int i = 1; i < size; i++)
                     {
@@ -175,9 +173,9 @@ namespace FinalProject
                             }
                         }
                     }
-                }
 
-                CharacterFrequencyObjectArray = array;
+                    size = size - 1;
+                }
             }
             //bool sorted = false;
             //int size = array.Length;
@@ -206,7 +204,7 @@ namespace FinalProject
 
             //    }
             //}
-            //CharacterFrequencyObjectArray = array;
+            CharacterFrequencyObjectArray = array;
         }
 
         private void HandleInput(char[] chars)

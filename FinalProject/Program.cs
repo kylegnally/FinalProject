@@ -11,7 +11,7 @@ namespace FinalProject
 
         static void Main(string[] args)
         {
-            string stringToEncode = "abbcccddddeeeeeffffffggggggghhhhhhhhiiiiiiiiijjjjjjjjjjkkkkkkkkkkk";
+            string stringToEncode = "hhhhhhhhakkkkgggggggkkkkkkkbbcccddddeeeeeffffffiiiiiiiiijjjjjjjjjj";
             
 
             if (args.Length > 0)
