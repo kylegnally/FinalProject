@@ -12,7 +12,7 @@ namespace FinalProject
         static void Main(string[] args)
         {
             string stringToEncode = ".kcjvhxjdhcvgzxkjdhvbxdj.rktghsdrjzgeulryskgfcusedtyf476r76r53 654reyfgvjx";
-            args = new[] { "wap.txt" };
+            args = new[] { "wap2.txt" };
 
 
             if (args.Length > 0)
