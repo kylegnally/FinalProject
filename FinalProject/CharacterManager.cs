@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Management.Instrumentation;
 
 namespace FinalProject
 {
@@ -10,6 +11,8 @@ namespace FinalProject
         /// Property to store the current directory as a string.
         /// </summary>
         private string CurrentDir { get; }
+
+        private CharacterFrequency[] _characterFreqencyArrayField;
 
         /// <summary>
         /// An array of CharacterFrequency objects.
@@ -79,35 +82,12 @@ namespace FinalProject
             }
         }
 
-        public int[] SortArray(int[] array)
-        {
-            bool sorted = false;
-            int size = array.Length;
-            while (!sorted)
-            {
-                // the whole array
-                foreach (int arrayMember in array)
-                {
-                    // for every array member 
-                    for (int i = 1; i < size; i++)
-                    {
-                        // do a comparison
-                        if (array[i] <= array[i - 1])
-                        {
-                            // do a swap
-                            int temp = array[i];
-                            array[i] = array[i - 1];
-                            array[i - 1] = temp;
-                            sorted = true;
-                        }
-                    }
-                    size = size - 1;
-                }
-            }
-            _resultingArray = array;
-            return Result;
-        }
+        
 
+        /// <summary>
+        /// Processes a given string into a string[] where each individual character of the original string is a member of the resulting array.
+        /// </summary>
+        /// <param name="s"></param>
         private void ProcessString(string s)
         {
             string[] sa = new string[s.Length];
@@ -117,6 +97,8 @@ namespace FinalProject
                 sa[i] = c.ToString();
                 i++;
             }
+
+            HandleInput(sa);
         }
 
         /// <summary>
@@ -131,6 +113,100 @@ namespace FinalProject
             string contents = file.ReadToEnd();
             chars = contents.ToCharArray();
             HandleInput(chars);
+        }
+
+
+        //private void SortFrequencies(CharacterFrequency[] characterFrequencyObjectArray)
+        //{
+        //    bool sorted = false;
+        //    int size = characterFrequencyObjectArray.Length;
+        //    while (!sorted)
+        //    {
+        //        // the whole array
+        //        foreach (CharacterFrequency freqObj in characterFrequencyObjectArray)
+        //        {
+        //            // for every array member 
+        //            for (int i = 1; i < size + 1; i++)
+        //            {
+        //                // do a comparison
+        //                if (characterFrequencyObjectArray[i].Frequency <= characterFrequencyObjectArray[i - 1].Frequency)
+        //                {
+        //                    // do a swap
+        //                    CharacterFrequency temp = characterFrequencyObjectArray[i];
+        //                    characterFrequencyObjectArray[i] = characterFrequencyObjectArray[i - 1];
+        //                    characterFrequencyObjectArray[i - 1] = temp;
+        //                    sorted = true;
+        //                }
+        //            }
+        //            size = size - 1;
+        //        }
+        //    }
+        //    CharacterFrequencyObjectArray = characterFrequencyObjectArray;
+        //}
+
+        public void SortFrequencies(CharacterFrequency[] array)
+        {
+            int frequency;
+            int asciiVal;
+            int size = array.Length;
+            bool sorted = false;
+
+            while (!sorted)
+            {
+                foreach (CharacterFrequency freq in array)
+                {
+                    if (freq != null)
+                    {
+                        frequency = freq.Frequency;
+                        asciiVal = freq.ASCII;
+                    }
+
+                    for (int i = 1; i < size; i++)
+                    {
+                        if (array[i] != null && array[i - 1] != null)
+                        {
+                            if (array[i].Frequency <= array[i - 1].Frequency)
+                            {
+                                // do a swap
+                                CharacterFrequency temp = array[i];
+                                array[i] = array[i - 1];
+                                array[i - 1] = temp;
+                                sorted = true;
+                            }
+                        }
+                    }
+                }
+
+                CharacterFrequencyObjectArray = array;
+            }
+            //bool sorted = false;
+            //int size = array.Length;
+            //while (!sorted)
+            //{
+            //    // the whole array
+            //    foreach (CharacterFrequency arrayMember in array)
+            //    {
+            //        if (arrayMember != null)
+            //        {
+            //            // for every array member 
+            //        for (int i = 1; i < size; i++)
+            //        {
+            //            // do a comparison
+            //            if (array[i].Frequency <= array[i - 1].Frequency)
+            //            {
+            //                // do a swap
+            //                CharacterFrequency temp = array[i];
+            //                array[i] = array[i - 1];
+            //                array[i - 1] = temp;
+            //                sorted = true;
+            //            }
+            //        }
+            //        size = size - 1;
+            //        }
+
+            //    }
+            //}
+            //CharacterFrequencyObjectArray = array;
         }
 
         private void HandleInput(char[] chars)
@@ -160,60 +236,29 @@ namespace FinalProject
 
         }
 
-        private CharacterFrequency[] SortFrequencies(CharacterFrequency[] characterFrequencyObjectArray)
-        {
-            bool sorted = false;
-            int size = characterFrequencyObjectArray.Length;
-            while (!sorted)
-            {
-                // the whole array
-                foreach (CharacterFrequency freqObj in characterFrequencyObjectArray)
-                {
-                    // for every array member 
-                    for (int i = 1; i < size; i++)
-                    {
-                        // do a comparison
-                        if (characterFrequencyObjectArray[i] <= characterFrequencyObjectArray[i - 1])
-                        {
-                            // do a swap
-                            int temp = array[i];
-                            array[i] = array[i - 1];
-                            array[i - 1] = temp;
-                            sorted = true;
-                        }
-                    }
-                    size = size - 1;
-                }
-            }
-            _resultingArray = array;
-            return Result;
-        }
-
         private void HandleInput(string[] s)
         {
-            char[] foundChars = new char[256];
+            //char[] foundChars = new char[256];
             CharacterFrequencyObjectArray = new CharacterFrequency[256];
             CharacterFrequency characterFrequencyObject;
-
+            
             foreach (string aString in s)
             {
-                for (int i = 0; i < CharacterFrequencyObjectArray.Length; i++)
+                // get our asciiVal
+                int asciiVal = (int) char.Parse(aString);
+
+                // if the entry at the index corresponding to the ascii value is null
+                if (CharacterFrequencyObjectArray[asciiVal] == null)
                 {
-                    int asciiVal = int.Parse(aString);
-                    if (CharacterFrequencyObjectArray[asciiVal] == null)
-                    {
-                        CharacterFrequencyObjectArray[asciiVal] = new CharacterFrequency(aString);
-                        break;
-                    }
-                    else if (CharacterFrequencyObjectArray[asciiVal].Equals(aString))
-                    {
-                        CharacterFrequencyObjectArray[asciiVal].IncrementFrequency();
-                        break;
-                    }
+                    // make a CF object from that
+                    CharacterFrequencyObjectArray[asciiVal] = new CharacterFrequency(aString);
                 }
+                else if (CharacterFrequencyObjectArray[asciiVal].Frequency > 0)
+                    CharacterFrequencyObjectArray[asciiVal].IncrementFrequency();
+                else CharacterFrequencyObjectArray[asciiVal] = new CharacterFrequency();
             }
 
-            // CharacterFrequencyObjectArray is what we want to use further. We'll sort it first.
+            SortFrequencies(CharacterFrequencyObjectArray);
 
         }
 

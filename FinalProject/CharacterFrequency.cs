@@ -10,30 +10,54 @@ namespace FinalProject
 {
     class CharacterFrequency
     {
-        public string String { get; set; }
+        private string _stringToCheck;
         public char Character { get; set; }
-        public int Frequency { get; set; }
-        public int ASCVal { get; set; }
 
-        public CharacterFrequency() { }
+        public string CharacterAsAString { get; set; }
+
+        public int Frequency { get; set; }
+
+        public int ASCII { get; set; }
+
+        public CharacterFrequency()
+        {
+            Frequency = 0;
+        }
 
         public CharacterFrequency(char charToCheck)
         {
-            Frequency = 0;
             Character = charToCheck;
             int _ascii = (int)charToCheck;
-            ASCVal = _ascii;
+            ASCII = _ascii;
             IncrementFrequency();
         }
 
         public CharacterFrequency(string stringToCheck)
         {
-            String = stringToCheck;
+            _stringToCheck = stringToCheck;
+            CharacterAsAString = _stringToCheck;
+            char c = char.Parse(stringToCheck);
+            int ascii = (int)c;
+            ASCII = ascii;
+            IncrementFrequency();
         }
 
         public bool Equals(char charToCheck)
         {
             if (Character == charToCheck)
+            {
+                return true;
+            }
+            else
+            {
+                Character = Character;
+            }
+            return false;
+        }
+
+        public bool Equals(string stringToCheck)
+        {
+            if (_stringToCheck == stringToCheck)
             {
                 return true;
             }
