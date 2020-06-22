@@ -145,7 +145,7 @@ namespace FinalProject
         //    CharacterFrequencyObjectArray = characterFrequencyObjectArray;
         //}
 
-        public void SortFrequencies(CharacterFrequency[] array)
+        public CharacterFrequency[] SortFrequencies(CharacterFrequency[] array)
         {
             int size = array.Length;
             bool sorted = false;
@@ -155,8 +155,9 @@ namespace FinalProject
                 {
                     for (int i = 1; i < size; i++)
                     {
-                        
-                        if (array[i].Frequency <= array[i - 1].Frequency)
+                        int freq1 = array[i].Frequency;
+                        int freq2 = array[i - 1].Frequency;
+                        if (freq1 <= freq2)
                         {
                             // do a swap
                             CharacterFrequency temp = array[i];
@@ -197,6 +198,7 @@ namespace FinalProject
             //    }
             //}
             CharacterFrequencyObjectArray = array;
+            return array;
         }
 
         private void HandleInput(char[] chars)
