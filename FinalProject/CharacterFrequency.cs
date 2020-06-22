@@ -15,9 +15,9 @@ namespace FinalProject
 
         public string CharacterAsAString { get; set; }
 
-        public int Frequency { get; private set; }
+        public int Frequency { get; set; }
 
-        public int ASCII { get; private set; }
+        public int ASCII { get; set; }
 
         public CharacterFrequency()
         {

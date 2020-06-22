@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace FinalProject
 {
@@ -12,13 +13,15 @@ namespace FinalProject
         /// <summary>
         /// Property to store the current directory as a string.
         /// </summary>
+
+        private int _leafCounter = 0;
         private string CurrentDir { get; }
 
         private CharacterFrequency[] _characterFreqencyArrayField;
-        private List<FrequencyNode<CharacterFrequency>> _nodeListField;
+        private Node<CharacterFrequency>[] _nodesArray;
 
         public CharacterFrequency[] CharacterFrequencyObjectArray { get; set; }
-        public List<FrequencyNode<CharacterFrequency>> SortedNodeList { get; set; }
+        public Node<CharacterFrequency>[] SortedNodesArray { get; set; }
 
         public CharacterManager(string s)
         {
@@ -161,8 +164,32 @@ namespace FinalProject
             }
 
             CharacterFrequencyObjectArray = _characterFreqencyArrayField;
-            MakeNodelist(SortFrequencies(CompactArray(CharacterFrequencyObjectArray)));
+            MakeNodeArray(SortFrequencies(CompactArray(CharacterFrequencyObjectArray)));
+            BuildBinaryTree(SortedNodesArray);
+        }
 
+        private void BuildBinaryTree(Node<CharacterFrequency>[] sortedNodesArray)
+        {
+            int pairFreqCount;
+            int lowerFreq;
+            int higherFreq;
+            char nonLeafString = '\\';
+            string contentsString;
+
+            Node<CharacterFrequency> newNode;
+
+
+            for (int i = 0; i < sortedNodesArray.Length; i++)
+            {
+                lowerFreq = sortedNodesArray[i].Element.Frequency;
+                higherFreq = sortedNodesArray[i + 1].Element.Frequency;
+                pairFreqCount = lowerFreq + higherFreq;
+                newNode = new Node<CharacterFrequency>(new CharacterFrequency());
+                newNode.Element.Character = nonLeafString;
+                newNode.Element.Frequency = pairFreqCount;
+                newNode.Left.Element = sortedNodesArray[i].Element;
+                newNode.Right.Element = sortedNodesArray[i + 1].Element;
+            }
         }
 
         private void HandleInput(string[] s)
@@ -184,7 +211,6 @@ namespace FinalProject
             }
 
             SortFrequencies(CompactArray(CharacterFrequencyObjectArray));
-            SortedNodeList = _nodeListField;
         }
 
         private CharacterFrequency[] CompactArray(CharacterFrequency[] freqArray)
@@ -208,16 +234,17 @@ namespace FinalProject
             return compacted;
         }
 
-        private List<FrequencyNode<CharacterFrequency>> MakeNodelist(CharacterFrequency[] freqArray)
+        private Node<CharacterFrequency>[] MakeNodeArray(CharacterFrequency[] freqArray)
         {
-            _nodeListField = new List<FrequencyNode<CharacterFrequency>>();
-            foreach (CharacterFrequency charFreq in freqArray)
+            _nodesArray = new Node<CharacterFrequency>[freqArray.Length];
+
+            for (int i = 0; 1 < freqArray.Length; i++)
             {
-                _nodeListField.Add(new FrequencyNode<CharacterFrequency>(charFreq));
+                _nodesArray[i] = new Node<CharacterFrequency>(freqArray[i]);
             }
 
-            SortedNodeList = _nodeListField;
-            return _nodeListField;
+            SortedNodesArray = _nodesArray;
+            return _nodesArray;
         }
     }
 }

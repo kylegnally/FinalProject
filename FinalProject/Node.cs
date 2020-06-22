@@ -3,13 +3,13 @@
 
 namespace FinalProject
 {
-    public class FrequencyNode<T>
+    public class Node<T>
     {
         private T el;
-        private FrequencyNode<T> left;
-        private FrequencyNode<T> right;
+        private Node<T> left;
+        private Node<T> right;
 
-        public FrequencyNode(T element)
+        public Node(T element)
         {
             el = element;
             left = null;
@@ -28,7 +28,7 @@ namespace FinalProject
             }
         }
 
-        public FrequencyNode<T> Left
+        public Node<T> Left
         {
             get
             {
@@ -40,7 +40,7 @@ namespace FinalProject
             }
         }
 
-        public FrequencyNode<T> Right
+        public Node<T> Right
         {
             get
             {
