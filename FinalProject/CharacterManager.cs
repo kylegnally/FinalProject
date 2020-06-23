@@ -193,26 +193,25 @@ namespace FinalProject
 
         private void BuildBinaryTree(List<Node<CharacterFrequency>> sortedNodes)
         {
-            //int pairFreqCount;
-            //int lowerFreq;
-            //int higherFreq;
-            //char nonLeafString = '\\';
-            //string contentsString;
+            // don't use a foreach here, use a for loop
+            int combinedFrequencies;
+            Node<CharacterFrequency> nextNode;
+            Node<CharacterFrequency> currentNode;
+            Node<CharacterFrequency> newNode = null;
+            CharacterFrequency emptyNodeChar = new CharacterFrequency("\\");
+            foreach (Node<CharacterFrequency> aNode in sortedNodes)
+            {
+                newNode = new Node<CharacterFrequency>(emptyNodeChar);
+                combinedFrequencies = 0;
+                int nodeIndex = sortedNodes.IndexOf(sortedNodes.GetEnumerator().Current);
+                currentNode = aNode;
+                nextNode = sortedNodes[nodeIndex + 1];
 
-            //Node<CharacterFrequency> newNode;
-
-
-            //for (int i = 0; i < sortedNodes.Count; i++)
-            //{
-            //    lowerFreq = sortedNodes[i].Element.Frequency;
-            //    higherFreq = sortedNodes[i + 1].Element.Frequency;
-            //    pairFreqCount = lowerFreq + higherFreq;
-            //    newNode = new Node<CharacterFrequency>(new CharacterFrequency());
-            //    newNode.Element.Character = nonLeafString;
-            //    newNode.Element.Frequency = pairFreqCount;
-            //    newNode.Left.Element = sortedNodes[i].Element;
-            //    newNode.Right.Element = sortedNodes[i + 1].Element;
-            //}
+                combinedFrequencies = currentNode.Element.Frequency + nextNode.Element.Frequency;
+                newNode.Element.Frequency = combinedFrequencies;
+                newNode.Left = currentNode;
+                newNode.Right = newNode;
+            }
         }
 
         private void HandleInput(string[] s)
