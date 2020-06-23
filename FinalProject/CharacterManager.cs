@@ -10,32 +10,40 @@ namespace FinalProject
 {
     class CharacterManager
     {
-        /// <summary>
-        /// Property to store the current directory as a string.
-        /// </summary>
+
+        /// ***********************************************************************************
+        ///         FIELDS
+        /// ***********************************************************************************
+
 
         private int _leafCounter = 0;
         private string CurrentDir { get; }
 
         private CharacterFrequency[] _characterFrequencyObjectArray;
-        private List<Node<CharacterFrequency>> _sortedNodeList;
-        private List<Node<CharacterFrequency>> _nodesList;
 
-        //public CharacterFrequency[] CharacterFrequencyObjectArray { get; set; }
-        public List<Node<CharacterFrequency>> NodesList { get; set; }
+        private List<Node<CharacterFrequency>> _sortedNodeList;
 
         private CharacterFrequency[] _compactedArray;
+
         private CharacterFrequency[] _sortedArray;
 
-        public CharacterFrequency[] CompactedArray { get; set; }
 
+        /// ***********************************************************************************
+        ///         CONSTRUCTORS
+        /// ***********************************************************************************
+
+
+        /// <summary>
+        /// String constructor for the CharacterManager class. 
+        /// </summary>
+        /// <param name="s"></param>
         public CharacterManager(string s)
         {
             ProcessString(s);
         }
 
         /// <summary>
-        /// Constructor for the CounterManager class. This construc
+        /// File (name as args) constructor for the CharacterManager class. 
         /// </summary>
         /// <param name="args"></param>
         public CharacterManager(string[] args)
@@ -49,6 +57,12 @@ namespace FinalProject
             ReadFile(args);
             Environment.Exit(0);
         }
+
+        /// ***********************************************************************************
+        ///         METHODS
+        /// ***********************************************************************************
+
+
         /// <summary>
         /// Method to read the file from the current directory.
         /// Includes exception types. Assigns the appropriate exception
@@ -87,7 +101,6 @@ namespace FinalProject
             }
         }
 
-        
 
         /// <summary>
         /// Processes a given string into a string[] where each individual character of the original string is a member of the resulting array.
@@ -123,7 +136,7 @@ namespace FinalProject
             BuildBinaryTree(_sortedNodeList);
         }
 
-        public CharacterFrequency[] SortFrequencies(CharacterFrequency[] array)
+        private CharacterFrequency[] SortFrequencies(CharacterFrequency[] array)
         {
             int size = array.Length;
             bool sorted = false;
@@ -250,9 +263,7 @@ namespace FinalProject
             {
                 _nodesList.Add(new Node<CharacterFrequency>(freqArray[i]));
             }
-        
 
-            NodesList = _nodesList;
             return _nodesList;
         }
     }
