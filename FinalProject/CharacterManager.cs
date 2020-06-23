@@ -17,11 +17,17 @@ namespace FinalProject
         private int _leafCounter = 0;
         private string CurrentDir { get; }
 
-        private CharacterFrequency[] _characterFreqencyArrayField;
-        private Node<CharacterFrequency>[] _nodesArray;
+        private CharacterFrequency[] _characterFrequencyObjectArray;
+        private List<Node<CharacterFrequency>> _sortedNodeList;
+        private List<Node<CharacterFrequency>> _nodesList;
 
-        public CharacterFrequency[] CharacterFrequencyObjectArray { get; set; }
-        public Node<CharacterFrequency>[] SortedNodesArray { get; set; }
+        //public CharacterFrequency[] CharacterFrequencyObjectArray { get; set; }
+        public List<Node<CharacterFrequency>> NodesList { get; set; }
+
+        private CharacterFrequency[] _compactedArray;
+        private CharacterFrequency[] _sortedArray;
+
+        public CharacterFrequency[] CompactedArray { get; set; }
 
         public CharacterManager(string s)
         {
@@ -110,6 +116,11 @@ namespace FinalProject
             string contents = file.ReadToEnd();
             chars = contents.ToCharArray();
             HandleInput(chars);
+            //MakeNodeArray(SortFrequencies(CompactArray(CharacterFrequencyObjectArray)));
+            _compactedArray = CompactArray(_characterFrequencyObjectArray);
+            _sortedArray = SortFrequencies(_compactedArray);
+            _sortedNodeList = MakeSortedNodeList(_sortedArray);
+            BuildBinaryTree(_sortedNodeList);
         }
 
         public CharacterFrequency[] SortFrequencies(CharacterFrequency[] array)
@@ -120,97 +131,94 @@ namespace FinalProject
             {
                 foreach (CharacterFrequency freq in array)
                 {
-                    for (int i = 1; i < size; i++)
+                    if (freq != null)
                     {
-                        int freq1 = array[i].Frequency;
-                        int freq2 = array[i - 1].Frequency;
-                        if (freq1 <= freq2)
+                        for (int i = 1; i < size; i++)
                         {
-                            CharacterFrequency temp = array[i];
-                            array[i] = array[i - 1];
-                            array[i - 1] = temp;
-                            sorted = true;
+                            int freq1 = array[i].Frequency;
+                            int freq2 = array[i - 1].Frequency;
+                            if (freq1 <= freq2)
+                            {
+                                CharacterFrequency temp = array[i];
+                                array[i] = array[i - 1];
+                                array[i - 1] = temp;
+                                sorted = true;
+                            }
                         }
+
+                        size = size - 1;
                     }
-                    
-                    size = size - 1;
                 }
             }
-            CharacterFrequencyObjectArray = array;
+            _characterFrequencyObjectArray = array;
             return array;
         }
 
         private void HandleInput(char[] chars)
         {
             char[] foundChars = new char[256];
-            _characterFreqencyArrayField = new CharacterFrequency[256];
+            _characterFrequencyObjectArray = new CharacterFrequency[256];
 
             foreach (char aChar in chars)
             {
-                for (int i = 0; i < _characterFreqencyArrayField.Length; i++)
+                for (int i = 0; i < _characterFrequencyObjectArray.Length; i++)
                 {
                     int asciiVal = (int)aChar;
-                    if (_characterFreqencyArrayField[asciiVal] == null)
+                    if (_characterFrequencyObjectArray[asciiVal] == null)
                     {
-                        _characterFreqencyArrayField[asciiVal] = new CharacterFrequency(aChar);
+                        _characterFrequencyObjectArray[asciiVal] = new CharacterFrequency(aChar);
                         break;
                     }
-                    else if (_characterFreqencyArrayField[asciiVal].Equals(aChar))
+                    else if (_characterFrequencyObjectArray[asciiVal].Equals(aChar))
                     {
-                        _characterFreqencyArrayField[asciiVal].IncrementFrequency();
+                        _characterFrequencyObjectArray[asciiVal].IncrementFrequency();
                         break;
                     }
                 }
             }
-
-            CharacterFrequencyObjectArray = _characterFreqencyArrayField;
-            MakeNodeArray(SortFrequencies(CompactArray(CharacterFrequencyObjectArray)));
-            BuildBinaryTree(SortedNodesArray);
         }
 
-        private void BuildBinaryTree(Node<CharacterFrequency>[] sortedNodesArray)
+        private void BuildBinaryTree(List<Node<CharacterFrequency>> sortedNodes)
         {
-            int pairFreqCount;
-            int lowerFreq;
-            int higherFreq;
-            char nonLeafString = '\\';
-            string contentsString;
+            //int pairFreqCount;
+            //int lowerFreq;
+            //int higherFreq;
+            //char nonLeafString = '\\';
+            //string contentsString;
 
-            Node<CharacterFrequency> newNode;
+            //Node<CharacterFrequency> newNode;
 
 
-            for (int i = 0; i < sortedNodesArray.Length; i++)
-            {
-                lowerFreq = sortedNodesArray[i].Element.Frequency;
-                higherFreq = sortedNodesArray[i + 1].Element.Frequency;
-                pairFreqCount = lowerFreq + higherFreq;
-                newNode = new Node<CharacterFrequency>(new CharacterFrequency());
-                newNode.Element.Character = nonLeafString;
-                newNode.Element.Frequency = pairFreqCount;
-                newNode.Left.Element = sortedNodesArray[i].Element;
-                newNode.Right.Element = sortedNodesArray[i + 1].Element;
-            }
+            //for (int i = 0; i < sortedNodes.Count; i++)
+            //{
+            //    lowerFreq = sortedNodes[i].Element.Frequency;
+            //    higherFreq = sortedNodes[i + 1].Element.Frequency;
+            //    pairFreqCount = lowerFreq + higherFreq;
+            //    newNode = new Node<CharacterFrequency>(new CharacterFrequency());
+            //    newNode.Element.Character = nonLeafString;
+            //    newNode.Element.Frequency = pairFreqCount;
+            //    newNode.Left.Element = sortedNodes[i].Element;
+            //    newNode.Right.Element = sortedNodes[i + 1].Element;
+            //}
         }
 
         private void HandleInput(string[] s)
         {
-            CharacterFrequencyObjectArray = new CharacterFrequency[256];
+            _characterFrequencyObjectArray = new CharacterFrequency[256];
             CharacterFrequency characterFrequencyObject;
             
             foreach (string aString in s)
             {
                 int asciiVal = (int) char.Parse(aString);
 
-                if (CharacterFrequencyObjectArray[asciiVal] == null)
+                if (_characterFrequencyObjectArray[asciiVal] == null)
                 {
-                    CharacterFrequencyObjectArray[asciiVal] = new CharacterFrequency(aString);
+                    _characterFrequencyObjectArray[asciiVal] = new CharacterFrequency(aString);
                 }
-                else if (CharacterFrequencyObjectArray[asciiVal].Frequency > 0)
-                    CharacterFrequencyObjectArray[asciiVal].IncrementFrequency();
-                else CharacterFrequencyObjectArray[asciiVal] = new CharacterFrequency();
+                else if (_characterFrequencyObjectArray[asciiVal].Frequency > 0)
+                    _characterFrequencyObjectArray[asciiVal].IncrementFrequency();
+                else _characterFrequencyObjectArray[asciiVal] = new CharacterFrequency();
             }
-
-            SortFrequencies(CompactArray(CharacterFrequencyObjectArray));
         }
 
         private CharacterFrequency[] CompactArray(CharacterFrequency[] freqArray)
@@ -222,29 +230,30 @@ namespace FinalProject
                 if (freqObj != null) tempList.Add(freqObj);
             }
 
-            CharacterFrequency[] compacted = new CharacterFrequency[tempList.Count];
+            _compactedArray = new CharacterFrequency[tempList.Count];
 
 
             foreach (CharacterFrequency freqObj in tempList)
             {
-                compacted[i] = freqObj;
+                _compactedArray[i] = freqObj;
                 i++;
             }
 
-            return compacted;
+            return _compactedArray;
         }
 
-        private Node<CharacterFrequency>[] MakeNodeArray(CharacterFrequency[] freqArray)
+        private List<Node<CharacterFrequency>> MakeSortedNodeList(CharacterFrequency[] freqArray)
         {
-            _nodesArray = new Node<CharacterFrequency>[freqArray.Length];
-
-            for (int i = 0; 1 < freqArray.Length; i++)
+            List<Node<CharacterFrequency>> _nodesList = new List<Node<CharacterFrequency>>();
+            
+            for (int i = 0; i < freqArray.Length; i++)
             {
-                _nodesArray[i] = new Node<CharacterFrequency>(freqArray[i]);
+                _nodesList.Add(new Node<CharacterFrequency>(freqArray[i]));
             }
+        
 
-            SortedNodesArray = _nodesArray;
-            return _nodesArray;
+            NodesList = _nodesList;
+            return _nodesList;
         }
     }
 }
