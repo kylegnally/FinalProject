@@ -21,7 +21,7 @@ namespace FinalProject
 
         private CharacterFrequency[] _characterFrequencyObjectArray;
 
-        private List<Node<CharacterFrequency>> _sortedNodeList;
+        private LinkedList<Node<CharacterFrequency>> _sortedNodeList;
 
         private CharacterFrequency[] _compactedArray;
 
@@ -117,6 +117,7 @@ namespace FinalProject
             }
 
             HandleInput(sa);
+            ProcessData();
         }
 
         /// <summary>
@@ -129,7 +130,11 @@ namespace FinalProject
             string contents = file.ReadToEnd();
             chars = contents.ToCharArray();
             HandleInput(chars);
-            //MakeNodeArray(SortFrequencies(CompactArray(CharacterFrequencyObjectArray)));
+            ProcessData();
+        }
+
+        private void ProcessData()
+        {
             _compactedArray = CompactArray(_characterFrequencyObjectArray);
             _sortedArray = SortFrequencies(_compactedArray);
             _sortedNodeList = MakeSortedNodeList(_sortedArray);
@@ -191,27 +196,85 @@ namespace FinalProject
             }
         }
 
-        private void BuildBinaryTree(List<Node<CharacterFrequency>> sortedNodes)
+        private void BuildBinaryTree(LinkedList<Node<CharacterFrequency>> sortedNodes)
         {
-            // don't use a foreach here, use a for loop
-            int combinedFrequencies;
-            Node<CharacterFrequency> nextNode;
-            Node<CharacterFrequency> currentNode;
-            Node<CharacterFrequency> newNode = null;
-            CharacterFrequency emptyNodeChar = new CharacterFrequency("\\");
-            foreach (Node<CharacterFrequency> aNode in sortedNodes)
-            {
-                newNode = new Node<CharacterFrequency>(emptyNodeChar);
-                combinedFrequencies = 0;
-                int nodeIndex = sortedNodes.IndexOf(sortedNodes.GetEnumerator().Current);
-                currentNode = aNode;
-                nextNode = sortedNodes[nodeIndex + 1];
+            Node<CharacterFrequency> leftChild;
+            Node<CharacterFrequency> rightChild;
+            Node<CharacterFrequency> emptyHead;
+            CharacterFrequency noData = new CharacterFrequency();
+            emptyHead = new Node<CharacterFrequency>(noData);
 
-                combinedFrequencies = currentNode.Element.Frequency + nextNode.Element.Frequency;
-                newNode.Element.Frequency = combinedFrequencies;
-                newNode.Left = currentNode;
-                newNode.Right = newNode;
+            for (int i = 0; i < sortedNodes.Count; i++)
+            {
+                leftChild = sortedNodes.First.Value;
+                sortedNodes.RemoveFirst();
+                rightChild = sortedNodes.First.Value;
+                sortedNodes.RemoveFirst();
+                emptyHead.Left = leftChild;
+                emptyHead.Right = rightChild;
+                emptyHead.Element.Frequency = leftChild.Element.Frequency + rightChild.Element.Frequency;
+                emptyHead.Element.Character = '\\';
+
+                foreach (Node<CharacterFrequency> aNode in sortedNodes)
+                {
+                    //if (emptyHead.Element.Frequency > aNode.Element.Frequency)
+                    // add the new node at that location
+                }
+                
             }
+            //LinkedList<Node<CharacterFrequency>> nodeList = sortedNodes;
+            //LinkedList<Node<CharacterFrequency>> tempList = new LinkedList<Node<CharacterFrequency>>();
+
+            //foreach (Node<CharacterFrequency> node in sortedNodes)
+            //{
+            //    tempList.AddLast(new Node<CharacterFrequency>(noData));
+            //    sortedNodes.RemoveFirst();
+            //}
+            
+            //int combinedFrequencies = 0;
+            //LinkedList<Node<CharacterFrequency>> tempList = sortedNodes;
+            //Node<CharacterFrequency> nextNode;
+            //Node<CharacterFrequency> currentNode;
+            //Node<CharacterFrequency> newNode = null;
+            //CharacterFrequency emptyNodeChar = new CharacterFrequency("\\");
+            //emptyNodeChar.CharacterAsAString = "\\";
+            //newNode = 
+            
+            //int combinedFrequencies = 0;
+            //LinkedList<Node<CharacterFrequency>> tempList = sortedNodes;
+            //Node<CharacterFrequency> nextNode;
+            //Node<CharacterFrequency> currentNode;
+            //Node<CharacterFrequency> newNode = null;
+            //CharacterFrequency emptyNodeChar = new CharacterFrequency("\\");
+
+            //foreach (Node<CharacterFrequency> node in sortedNodes)
+            //{
+            //    nodeList.AddLast(node);
+            //}
+
+            //while (tempList.Count > 1)
+            //{
+            //    newNode = new Node<CharacterFrequency>(emptyNodeChar);
+            //    for (int i = 0; i < sortedNodes.Count; i++)
+            //    {
+            //        currentNode = node;
+            //        nextNode = sortedNodes[i + 1];
+            //        newNode.Left = currentNode;
+            //        newNode.Right = nextNode;
+            //        newNode.Element = emptyNodeChar;
+            //        newNode.Element.Frequency = newNode.Left.Element.Frequency + newNode.Right.Element.Frequency;
+            //        tempList.Remove(currentNode);
+            //        tempList.Remove(nextNode);
+            //        for (int j = 0; j < tempList.Count; j++)
+            //        {
+            //            if (newNode.Element.Frequency < tempList[j].Element.Frequency)
+            //            {
+            //                tempList.Insert(j, newNode);
+            //                break;
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private void HandleInput(string[] s)
@@ -254,13 +317,13 @@ namespace FinalProject
             return _compactedArray;
         }
 
-        private List<Node<CharacterFrequency>> MakeSortedNodeList(CharacterFrequency[] freqArray)
+        private LinkedList<Node<CharacterFrequency>> MakeSortedNodeList(CharacterFrequency[] freqArray)
         {
-            List<Node<CharacterFrequency>> _nodesList = new List<Node<CharacterFrequency>>();
+            LinkedList<Node<CharacterFrequency>> _nodesList = new LinkedList<Node<CharacterFrequency>>();
             
             for (int i = 0; i < freqArray.Length; i++)
             {
-                _nodesList.Add(new Node<CharacterFrequency>(freqArray[i]));
+                _nodesList.AddLast(new Node<CharacterFrequency>(freqArray[i]));
             }
 
             return _nodesList;
